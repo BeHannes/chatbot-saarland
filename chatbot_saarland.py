@@ -1,59 +1,83 @@
-# chatbot_saarland.py
-
 import streamlit as st
 
-st.set_page_config(page_title="Berufsorientierungs-Chatbot Saarland", page_icon="💼", layout="centered")
+st.set_page_config(page_title="Berufsorientierung Saarland", layout="centered")
 
-st.title("💼 Berufsorientierungs-Chatbot Saarland")
-st.markdown("""
-Willkommen! Dieser Chatbot hilft Menschen im Saarland, die von **Jobverlust** betroffen sind oder sich beruflich **neu orientieren** möchten.
+st.title("💬 Berufsorientierung im Saarland")
+st.write("Willkommen! Dieser Chatbot hilft dir bei beruflicher Neuorientierung nach Jobverlust oder drohendem Jobverlust.")
 
-Bitte beantworte die folgenden Fragen, damit wir dir passende Informationen und Empfehlungen geben können.
-""")
+# Schritt 1: Wohnort und Beruf
+st.header("1️⃣ Deine aktuelle Situation")
+wohnort = st.text_input("In welchem Ort im Saarland wohnst du?")
+beruf = st.text_input("Was ist dein aktueller oder letzter Beruf?")
+situation = st.selectbox("Wie ist deine aktuelle Lage?", [
+    "Ich habe meinen Job verloren",
+    "Ich bin von Jobverlust bedroht",
+    "Ich möchte mich freiwillig neu orientieren"
+])
 
-with st.form("chatbot_form"):
-    wohnort = st.text_input("🏠 In welchem Ort im Saarland wohnst du?")
-    beruf = st.text_input("🧑‍💼 In welchem Beruf warst du zuletzt tätig?")
-    situation = st.selectbox("📉 Was ist deine aktuelle Situation?", [
-        "Ich habe meinen Job verloren",
-        "Ich bin von Jobverlust bedroht",
-        "Ich möchte mich beruflich verändern"
-    ])
-    interessen = st.text_area("🎯 Welche beruflichen Interessen oder Stärken hast du?")
-    weiterbildung = st.selectbox("📚 Bist du offen für Weiterbildung oder Umschulung?", [
-        "Ja, ich möchte mich weiterbilden",
-        "Vielleicht, ich bin unsicher",
-        "Nein, aktuell nicht"
-    ])
-    beratung = st.selectbox("🤝 Möchtest du persönliche Beratung in Anspruch nehmen?", [
-        "Ja, bitte",
-        "Vielleicht später",
-        "Nein"
-    ])
-    submitted = st.form_submit_button("Antworten abschicken")
+# Schritt 2: Interessen
+st.header("2️⃣ Deine Interessen")
+interessen = st.multiselect("Welche Bereiche interessieren dich?", [
+    "IT & Digitalisierung",
+    "Gesundheit & Soziales",
+    "Umwelt & Nachhaltigkeit",
+    "Handwerk & Technik",
+    "Bildung & Pädagogik",
+    "Kaufmännisch & Verwaltung"
+])
 
-if submitted:
-    st.success("✅ Vielen Dank für deine Angaben!")
-    st.markdown("### 📝 Deine Zusammenfassung")
-    st.write(f"- **Wohnort:** {wohnort}")
-    st.write(f"- **Beruf:** {beruf}")
-    st.write(f"- **Situation:** {situation}")
-    st.write(f"- **Interessen/Stärken:** {interessen}")
-    st.write(f"- **Weiterbildungswunsch:** {weiterbildung}")
-    st.write(f"- **Beratungswunsch:** {beratung}")
+# Schritt 3: Weiterbildung
+st.header("3️⃣ Weiterbildung")
+weiterbildung = st.selectbox("Hast du Interesse an einer Weiterbildung oder Umschulung?", [
+    "Ja, ich möchte mich weiterbilden",
+    "Vielleicht, ich bin mir noch unsicher",
+    "Nein, aktuell nicht"
+])
 
-    st.markdown("### 📌 Empfehlungen & Ressourcen")
+# Schritt 4: Beratung
+st.header("4️⃣ Beratung")
+beratung = st.selectbox("Möchtest du eine persönliche Beratung in Anspruch nehmen?", [
+    "Ja, bitte",
+    "Vielleicht später",
+    "Nein"
+])
 
-    st.markdown("""
-- 🔗 [Agentur für Arbeit Saarland](https://www.arbeitsagentur.de/vor-ort/saarland) – Beratung, Arbeitslosmeldung, Weiterbildung
-- 🔗 [KURSNET](https://kursnet-finden.arbeitsagentur.de/kurs/) – Weiterbildungsangebote in deiner Region
-- 🔗 [IHK Saarland](https://www.saarland.ihk.de/) – Informationen zu Umschulungen und beruflicher Neuorientierung
-- 🔗 [HWK Saarland](https://www.hwk-saarland.de/) – Angebote für handwerkliche Berufe und Weiterbildung
-- 📞 **Hotline der Agentur für Arbeit:** 0800 4 5555 00 (kostenfrei)
-""")
+# Schritt 5: Empfehlungen anzeigen
+if st.button("📋 Empfehlungen anzeigen"):
+    st.subheader("🔍 Deine Angaben")
+    st.write(f"**Wohnort:** {wohnort}")
+    st.write(f"**Beruf:** {beruf}")
+    st.write(f"**Situation:** {situation}")
+    st.write(f"**Interessen:** {', '.join(interessen)}")
+    st.write(f"**Weiterbildung:** {weiterbildung}")
+    st.write(f"**Beratung:** {beratung}")
 
-    st.markdown("💬 Wenn du möchtest, kannst du deine Angaben speichern oder mit einer Beratungsstelle teilen.")
+    st.subheader("🌱 Branchen mit Zukunft")
+    if "IT & Digitalisierung" in interessen:
+        st.markdown("- **IT & Digitalisierung**: KI, Cybersecurity, Cloud, Datenanalyse")
+    if "Gesundheit & Soziales" in interessen:
+        st.markdown("- **Gesundheit & Soziales**: Pflege, Medizintechnik, psychosoziale Beratung")
+    if "Umwelt & Nachhaltigkeit" in interessen:
+        st.markdown("- **Umwelt & Nachhaltigkeit**: Recycling, erneuerbare Energien, Umwelttechnik")
+    if "Handwerk & Technik" in interessen:
+        st.markdown("- **Handwerk & Technik**: Gebäudetechnik, Fahrzeugtechnik, SHK")
+    if "Bildung & Pädagogik" in interessen:
+        st.markdown("- **Bildung & Pädagogik**: Erzieher/in, Bildungscoach, pädagogische Weiterbildungen")
+    if "Kaufmännisch & Verwaltung" in interessen:
+        st.markdown("- **Kaufmännisch & Verwaltung**: Buchhaltung, Controlling, Projektorganisation")
 
-    st.info("👉 Dies ist ein Prototyp. Für eine persönliche Beratung empfehlen wir den Kontakt zur Agentur für Arbeit oder IHK/HWK.")
+    st.subheader("🎓 Weiterbildungsangebote")
+    st.markdown("- [KURSNET der Agentur für Arbeit](https://kursnet-finden.arbeitsagentur.de)")
+    st.markdown("- [Weiterbildungsportal Saarland](https://weiterbildungsportal.saarland/)")
+    st.markdown("- [IHK Saarland](https://www.saarland.ihk.de)")
+    st.markdown("- [HWK des Saarlandes](https://www.hwk-saarland.de)")
+
+    if beratung == "Ja, bitte":
+        st.subheader("📞 Beratungsmöglichkeiten")
+        st.markdown("- Agentur für Arbeit: Persönliche Beratung und Bildungsgutschein")
+        st.markdown("- IHK/HWK: Beratung zu Umschulungen und Meisterkursen")
+        st.markdown("- Jobcenter: Förderprogramme und Coaching")
+
+    st.success("✅ Du kannst diese Informationen nutzen, um deine nächsten Schritte zu planen. Viel Erfolg!")
 
 
