@@ -1,50 +1,35 @@
 import streamlit as st
+import requests
 
 st.set_page_config(page_title="Berufsorientierung Saarland", layout="centered")
 
-st.title("💬 Berufsorientierung im Saarland")
-st.write("Willkommen! Dieser Chatbot hilft dir bei beruflicher Neuorientierung nach Jobverlust oder drohendem Jobverlust.")
+st.title("💬 Berufsorientierungs-Chatbot Saarland")
+st.write("Willkommen! Ich helfe dir bei beruflicher Neuorientierung im Saarland – z. B. nach Jobverlust oder in einer Umbruchphase.")
 
-# Schritt 1: Wohnort und Beruf
-st.header("1️⃣ Deine aktuelle Situation")
-wohnort = st.text_input("In welchem Ort im Saarland wohnst du?")
+# Schritt 1: Grunddaten
+st.header("1️⃣ Deine Situation")
+wohnort = st.text_input("In welchem Ort wohnst du?")
 beruf = st.text_input("Was ist dein aktueller oder letzter Beruf?")
-situation = st.selectbox("Wie ist deine aktuelle Lage?", [
-    "Ich habe meinen Job verloren",
-    "Ich bin von Jobverlust bedroht",
-    "Ich möchte mich freiwillig neu orientieren"
-])
+situation = st.selectbox("Wie ist deine aktuelle Situation?", ["Ich habe meinen Job verloren", "Ich bin von Jobverlust bedroht", "Ich möchte mich beruflich verändern"])
 
 # Schritt 2: Interessen
 st.header("2️⃣ Deine Interessen")
-interessen = st.multiselect("Welche Bereiche interessieren dich?", [
-    "IT & Digitalisierung",
-    "Gesundheit & Soziales",
-    "Umwelt & Nachhaltigkeit",
-    "Handwerk & Technik",
-    "Bildung & Pädagogik",
-    "Kaufmännisch & Verwaltung"
-])
+interessen = st.multiselect(
+    "Welche Bereiche interessieren dich besonders?",
+    ["IT & Digitalisierung", "Gesundheit & Soziales", "Umwelt & Nachhaltigkeit", "Handwerk & Technik", "Bildung & Pädagogik", "Kaufmännisch & Verwaltung"]
+)
 
 # Schritt 3: Weiterbildung
 st.header("3️⃣ Weiterbildung")
-weiterbildung = st.selectbox("Hast du Interesse an einer Weiterbildung oder Umschulung?", [
-    "Ja, ich möchte mich weiterbilden",
-    "Vielleicht, ich bin mir noch unsicher",
-    "Nein, aktuell nicht"
-])
+weiterbildung = st.selectbox("Hast du Interesse an einer Weiterbildung oder Umschulung?", ["Ja", "Nein", "Vielleicht"])
 
 # Schritt 4: Beratung
 st.header("4️⃣ Beratung")
-beratung = st.selectbox("Möchtest du eine persönliche Beratung in Anspruch nehmen?", [
-    "Ja, bitte",
-    "Vielleicht später",
-    "Nein"
-])
+beratung = st.selectbox("Möchtest du persönliche Beratung in Anspruch nehmen?", ["Ja", "Nein", "Vielleicht später"])
 
-# Schritt 5: Empfehlungen anzeigen
-if st.button("📋 Empfehlungen anzeigen"):
-    st.subheader("🔍 Deine Angaben")
+# Schritt 5: Ergebnisse anzeigen
+if st.button("🔍 Auswertung & Empfehlungen anzeigen"):
+    st.subheader("📋 Deine Angaben")
     st.write(f"**Wohnort:** {wohnort}")
     st.write(f"**Beruf:** {beruf}")
     st.write(f"**Situation:** {situation}")
@@ -52,32 +37,58 @@ if st.button("📋 Empfehlungen anzeigen"):
     st.write(f"**Weiterbildung:** {weiterbildung}")
     st.write(f"**Beratung:** {beratung}")
 
-    st.subheader("🌱 Branchen mit Zukunft")
-    if "IT & Digitalisierung" in interessen:
-        st.markdown("- **IT & Digitalisierung**: KI, Cybersecurity, Cloud, Datenanalyse")
-    if "Gesundheit & Soziales" in interessen:
-        st.markdown("- **Gesundheit & Soziales**: Pflege, Medizintechnik, psychosoziale Beratung")
-    if "Umwelt & Nachhaltigkeit" in interessen:
-        st.markdown("- **Umwelt & Nachhaltigkeit**: Recycling, erneuerbare Energien, Umwelttechnik")
-    if "Handwerk & Technik" in interessen:
-        st.markdown("- **Handwerk & Technik**: Gebäudetechnik, Fahrzeugtechnik, SHK")
-    if "Bildung & Pädagogik" in interessen:
-        st.markdown("- **Bildung & Pädagogik**: Erzieher/in, Bildungscoach, pädagogische Weiterbildungen")
-    if "Kaufmännisch & Verwaltung" in interessen:
-        st.markdown("- **Kaufmännisch & Verwaltung**: Buchhaltung, Controlling, Projektorganisation")
+    st.subheader("🎓 Weiterbildungsempfehlungen")
+    for interesse in interessen:
+        if interesse == "IT & Digitalisierung":
+            st.markdown("- Umschulung zum Fachinformatiker, IT-Support, Datenanalyse")
+        elif interesse == "Gesundheit & Soziales":
+            st.markdown("- Weiterbildung zur Betreuungskraft, Pflegeberater/in")
+        elif interesse == "Umwelt & Nachhaltigkeit":
+            st.markdown("- Kurse zu erneuerbaren Energien, Recycling, Umwelttechnik")
+        elif interesse == "Handwerk & Technik":
+            st.markdown("- Umschulung in SHK, Elektro, Fahrzeugtechnik")
+        elif interesse == "Bildung & Pädagogik":
+            st.markdown("- Weiterbildung zum Erzieher/in, Bildungscoach")
+        elif interesse == "Kaufmännisch & Verwaltung":
+            st.markdown("- Fortbildung in Buchhaltung, Projektorganisation")
 
-    st.subheader("🎓 Weiterbildungsangebote")
-    st.markdown("- [KURSNET der Agentur für Arbeit](https://kursnet-finden.arbeitsagentur.de)")
-    st.markdown("- [Weiterbildungsportal Saarland](https://weiterbildungsportal.saarland/)")
-    st.markdown("- [IHK Saarland](https://www.saarland.ihk.de)")
-    st.markdown("- [HWK des Saarlandes](https://www.hwk-saarland.de)")
+    st.markdown("🔗 [Weiterbildungsportal Saarland](https://weiterbildungsportal.saarland/)")
+    st.markdown("🔗 [KURSNET der Agentur für Arbeit](https://kursnet-finden.arbeitsagentur.de/kurs/)")
+    st.markdown("🔗 [IHK Saarland](https://www.saarland.ihk.de/)")
+    st.markdown("🔗 [HWK Saarland](https://www.hwk-saarland.de/)")
 
-    if beratung == "Ja, bitte":
+    st.subheader("💼 Aktuelle Jobangebote im Saarland")
+
+    # API-Abfrage für Jobangebote
+    api_url = "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v4/jobs"
+    headers = {"X-API-Key": "jobboerse-jobsuche"}
+    for interesse in interessen:
+        st.markdown(f"**{interesse}**")
+        params = {
+            "wo": "Saarland",
+            "was": interesse,
+            "size": 5
+        }
+        response = requests.get(api_url, headers=headers, params=params)
+        if response.status_code == 200:
+            jobs = response.json().get("stellenangebote", [])
+            if jobs:
+                for job in jobs:
+                    titel = job.get("titel", "Kein Titel")
+                    arbeitgeber = job.get("arbeitgeber", {}).get("name", "Unbekannt")
+                    ort = job.get("arbeitsort", {}).get("ort", "Unbekannt")
+                    link = job.get("links", {}).get("details", "#")
+                    st.markdown(f"- [{titel}]({link}) bei **{arbeitgeber}** in *{ort}*")
+            else:
+                st.markdown("Keine aktuellen Angebote gefunden.")
+        else:
+            st.markdown("Fehler beim Abrufen der Jobangebote.")
+
+    if beratung == "Ja":
         st.subheader("📞 Beratungsmöglichkeiten")
-        st.markdown("- Agentur für Arbeit: Persönliche Beratung und Bildungsgutschein")
-        st.markdown("- IHK/HWK: Beratung zu Umschulungen und Meisterkursen")
-        st.markdown("- Jobcenter: Förderprogramme und Coaching")
+        st.markdown("- Agentur für Arbeit: [www.arbeitsagentur.de](https://www.arbeitsagentur.de)")
+        st.markdown("- Berufsberatung vor Ort oder telefonisch")
+        st.markdown("- Coaching mit AVGS-Gutschein möglich")
 
-    st.success("✅ Du kannst diese Informationen nutzen, um deine nächsten Schritte zu planen. Viel Erfolg!")
-
+    st.success("✅ Auswertung abgeschlossen. Du kannst deine Angaben anpassen und erneut auswerten.")
 
